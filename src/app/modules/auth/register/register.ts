@@ -1,56 +1,83 @@
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../service/auth.service';
 import { UserRole } from '../dto/user-role.enum';
 import { RegisterUserDTO } from '../dto/register-user.dto';
 import { RouterLink } from '@angular/router';
+import { RegisterService } from './service/register.service';
+import { passwordsMatchValidator } from '../../../validators/passwords-match.validator';
+import { FaIconComponent, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink,FontAwesomeModule, FaIconComponent],
   templateUrl: './register.html',
 })
 export class Register {
 
-
+faUser = faUser;
 registerForm!: ReturnType<FormBuilder['group']>;
+errorMessage: string = "";
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private registerService: RegisterService
   ) {
-    // Inicializamos el formulario con validaciones
+
     this.registerForm = this.fb.group({
-      username: ['', [
+
+      username: this.fb.control('', {
+        nonNullable: true,
+        validators: [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(50),
         Validators.pattern(/^[a-zA-Z0-9_]+$/),
-      ]],
+      ],
+      }),
 
-      email: ['', [
+      email: this.fb.control('', {
+        nonNullable: true,
+        validators: [
         Validators.required,
         Validators.email,
         Validators.maxLength(100),
-      ]],
+      ],
+      }),
 
-      password: ['', [
+      password: this.fb.control('', {
+        nonNullable: true,
+        validators: [
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(100),
         Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
-      ]],
+      ],
+      }),
 
-      confirmPassword: ['', Validators.required],
+      confirmPassword: this.fb.control('', {
+        nonNullable: true,
+        validators: Validators.required,
+      }),
 
-      role: [UserRole.ADMIN, Validators.required], // usa el enum
-    });
+      role: this.fb.control<UserRole | null>(null, {
+        validators: Validators.required,
+      })
+    },
+    {
+      validators: passwordsMatchValidator,
+     }
+  );
   }
 
   // ✅ Función para enviar el formulario
-  submit() {
+  async submit() {
+    this.errorMessage = '';
     // Si el formulario es inválido, marcamos todos los campos
     if (this.registerForm.invalid) {
+      this.errorMessage = 'Por favor, revisa los campos del formulario';
+      console.log("No pasa la validacion");
+      
       this.registerForm.markAllAsTouched();
       return;
     }
@@ -63,14 +90,24 @@ registerForm!: ReturnType<FormBuilder['group']>;
       role: this.registerForm.get('role')!.value!,
     };
 
-    // Llamamos al servicio
+    console.log("payload", payload);
+    
+
+  /*   // Llamamos al servicio
     this.authService.register(payload).then(() => {
       console.log('Usuario creado');
       // aquí puedes redirigir o mostrar mensaje
     }).catch(err => {
       console.error('Error al registrar usuario', err);
       // manejar errores
-    });
+    }); */
+     try {
+    await this.registerService.register(this.registerForm.value);
+    // éxito
+     console.log('Usuario creado');
+  } catch (error: any) {
+    this.errorMessage = error.message;
+  }
   }
 
 }
