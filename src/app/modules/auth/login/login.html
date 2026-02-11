@@ -1,1 +1,52 @@
-<p>login works!</p>
+<div class="flex items-center justify-center w-screen h-screen">
+
+<div
+  class="w-full max-w-xl mx-auto bg-linear-to-r from-white/10 via-white/5 to-purple-500/10 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20 relative overflow-hidden"
+>
+  <div class="absolute -top-24 -right-24 w-64 h-64 bg-purple-600/30 rounded-full blur-3xl"></div>
+
+  <h2 class="text-3xl font-extrabold text-white mb-8 text-center tracking-wide">Bienvenido de Vuelta</h2>
+
+  <form 
+    
+    class="space-y-5 relative z-10"
+  >
+    
+
+    <input
+      formControlName="email"
+      type="email"
+      placeholder="Correo electrónico"
+      required
+      class="w-full px-4 py-3 rounded-xl bg-white/15 text-white placeholder-white/60 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+    />
+
+    <input
+      formControlName="password"
+      type="password"
+      placeholder="Contraseña"
+      required
+      class="w-full px-4 py-3 rounded-xl bg-white/15 text-white placeholder-white/60 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+    />
+
+    <button
+      type="submit"
+      class="w-full py-3 rounded-xl font-semibold text-white bg-linear-to-r from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800"
+    >
+      Autenticarse
+    </button>
+  </form>
+
+  <div class="mt-6 text-center text-sm text-white/80 relative z-10">
+    ¿No tienes una cuenta?
+    <button
+      type="button"
+      routerLink="/register" 
+      class="text-purple-300 hover:text-purple-400 font-medium cursor-pointer"
+      > 
+      Registrate 
+    </button>
+  </div>
+</div>
+
+</div>
