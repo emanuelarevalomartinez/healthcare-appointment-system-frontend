@@ -6,16 +6,19 @@ import { RouterLink } from '@angular/router';
 import { RegisterService } from './service/register.service';
 import { passwordsMatchValidator } from '../../../validators/passwords-match.validator';
 import { FaIconComponent, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faLock, faKey, faAt } from '@fortawesome/free-solid-svg-icons';
+import { InputGeneral } from "../../../components/inputs/input-general/input-general";
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink,FontAwesomeModule, FaIconComponent],
+  imports: [ReactiveFormsModule, RouterLink, FontAwesomeModule, FaIconComponent, InputGeneral],
   templateUrl: './register.html',
 })
 export class Register {
 
 faUser = faUser;
+faKey = faKey;
+faAt = faAt;
 registerForm!: ReturnType<FormBuilder['group']>;
 errorMessage: string = "";
 
